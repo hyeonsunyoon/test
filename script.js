@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         offsetX = clientX - circle.getBoundingClientRect().left;
         offsetY = clientY - circle.getBoundingClientRect().top;
         circle.style.transition = "none";
+        e.preventDefault();  // 터치 이벤트에서 클릭을 방지하기 위해 기본 동작 방지
     }
 
     function onDrag(e) {
@@ -44,10 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     circle.addEventListener("mousedown", startDrag);
-    circle.addEventListener("touchstart", startDrag);
+    circle.addEventListener("touchstart", startDrag, { passive: false });
 
     document.addEventListener("mousemove", onDrag);
-    document.addEventListener("touchmove", onDrag);
+    document.addEventListener("touchmove", onDrag, { passive: false });
 
     document.addEventListener("mouseup", endDrag);
     document.addEventListener("touchend", endDrag);
