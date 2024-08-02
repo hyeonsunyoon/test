@@ -18,26 +18,39 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDragging = false;
     let offsetX, offsetY;
 
-    circle.addEventListener("mousedown", (e) => {
+    function startDrag(e) {
         isDragging = true;
-        offsetX = e.clientX - circle.getBoundingClientRect().left;
-        offsetY = e.clientY - circle.getBoundingClientRect().top;
+        const clientX = e.clientX || e.touches[0].clientX;
+        const clientY = e.clientY || e.touches[0].clientY;
+        offsetX = clientX - circle.getBoundingClientRect().left;
+        offsetY = clientY - circle.getBoundingClientRect().top;
         circle.style.transition = "none";
-    });
+    }
 
-    document.addEventListener("mousemove", (e) => {
+    function onDrag(e) {
         if (isDragging) {
-            const x = e.clientX - offsetX;
-            const y = e.clientY - offsetY;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            const x = clientX - offsetX;
+            const y = clientY - offsetY;
             circle.style.left = `${x}px`;
             circle.style.top = `${y}px`;
         }
-    });
+    }
 
-    document.addEventListener("mouseup", () => {
+    function endDrag() {
         isDragging = false;
         circle.style.transition = "left 0.1s ease-out, top 0.1s ease-out";
-    });
+    }
+
+    circle.addEventListener("mousedown", startDrag);
+    circle.addEventListener("touchstart", startDrag);
+
+    document.addEventListener("mousemove", onDrag);
+    document.addEventListener("touchmove", onDrag);
+
+    document.addEventListener("mouseup", endDrag);
+    document.addEventListener("touchend", endDrag);
 
     // 창 크기 변경 시 원 위치 재조정
     window.addEventListener("resize", placeCircleRandomly);
